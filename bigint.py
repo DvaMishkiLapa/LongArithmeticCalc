@@ -1,8 +1,8 @@
 class BigInt(object):
     """Класс работы с большими целыми числами"""
-    MAX_SIZE_STEP = 2000    # На будущее
-    is_neg = False          # Флаг отрицательности числа
-    value = ''              # Число в виде стоки
+    MAX_SIZE_STEP = 2000
+    is_neg = False  # Флаг отрицательности числа
+    value = ''      # Число в виде стоки
 
     def __init__(self, x=0):
         """Без аргументов конструктор задает значение равное нулю.
@@ -30,6 +30,13 @@ class BigInt(object):
             self.value = x.value
             self.is_neg = x.is_neg
 
+    def is_iven(self):
+        return int(self.value[len(self.value) - 1]) % 2 == 0
+
+    # Перегрузка числа по модулю
+    def __abs__(self):
+        return self.value
+
     # Обработка для выходных данных
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
@@ -37,3 +44,19 @@ class BigInt(object):
 
 if __name__ == '__main__':
     pass
+
+a = BigInt(1)
+b = BigInt('8')
+c = BigInt(a)
+d = BigInt(-42)
+f = BigInt('-102')
+
+print(a, b, c, d, f)
+
+print('a is_iven: ', a.is_iven())
+print('b is_iven: ', b.is_iven())
+
+print('a abs = ', abs(a))
+print('f abs = ', abs(f))
+
+
