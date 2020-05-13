@@ -44,19 +44,3 @@ class BigInt(object):
 
 if __name__ == '__main__':
     pass
-
-a = BigInt(1)
-b = BigInt('8')
-c = BigInt(a)
-d = BigInt(-42)
-f = BigInt('-102')
-
-print(a, b, c, d, f)
-
-print('a is_iven: ', a.is_iven())
-print('b is_iven: ', b.is_iven())
-
-print('a abs = ', abs(a))
-print('f abs = ', abs(f))
-
-
