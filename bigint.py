@@ -30,6 +30,7 @@ class BigInt(object):
             self.value = x.value
             self.is_neg = x.is_neg
 
+    # Является ли число четным
     def is_iven(self):
         return int(self.value[len(self.value) - 1]) % 2 == 0
 
@@ -82,6 +83,65 @@ class BigInt(object):
     # Унарный минус
     def __neg__(self):
         return BigInt(self.value if self.is_neg else '-' + self.value)
+
+    # Возврат копии
+    def copy(self):
+        return BigInt(('-' if self.is_neg else '') + self.value)
+
+    # Сложение двух чисел
+    def __add__(self, other):
+        new_int = BigInt()
+        # Если знаки одинаковые, то выполняем сложение
+        if not (other.is_neg ^ self.is_neg):
+            num2 = other.value  # Запоминаем значение второго операнда
+            self_len = len(self.value)  # Длинна первого операнда
+            other_len = len(num2)  # Длинна второго операнда
+            # Длина суммы равна максимуму из двух длин + 1 из-за возможного переноса разряда
+            length = max(self_len, other_len) + 1
+            res = [0 for _ in range(length)]
+            for i in range(length - 1):
+                j = length - 1 - i
+                # Выполняем сложение разрядов
+                res[j] += int((num2[other_len - 1 - i] if i < other_len else '0')) + int((self.value[self_len - 1 - i] if i < self_len else '0'))
+                res[j - 1] = res[j] // 10  # Выполняем перенос в следущий разряд, если он был
+                res[j] = res[j] % 10  # Оставляем только единицы от возможного переноса и превращаем символ в цифру
+            return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
+        else:
+            # Если одно из чисел отрицательное, а другое положительное, отправляем на вычитание, меняя знак
+            return (self - (-BigInt(other))) if self.is_neg else (other - (-BigInt(self)))
+
+    # Вычитание одного числа из другого
+    def __sub__(self, other):
+        # Если числа равны, считать не нужно
+        if self == other:
+            return 0
+        # Если оба числа положительные, выполняем вычитание
+        if not self.is_neg and not other.is_neg:
+            self_len = len(self.value)  # Запоминаем длину первого числа
+            self_other = len(other.value)  # Запоминаем длину второго числа
+            length = max(self_len, self_other)  # Длина результата не превысит максимума длин чисел
+            is_neg_res = other > self  # Определяем знак результата
+            # Массивы аргументов
+            a = [0 for _ in range(length)]
+            b = [0 for _ in range(length)]
+            res = [0 for _ in range(length)]
+            sign = 2 * is_neg_res - 1  # Получаем числовое значение знака результата
+            for i in range(length - 1):
+                a[i] += int(self.value[self_len - 1 - i]) if i < self_len else 0  # Формируем разряды
+                b[i] += int(other.value[self_other - 1 - i]) if i < self_other else 0  # Из строк аргументов
+                b[i + 1] = -is_neg_res  # В зависимости от знака занимаем или не занимаем
+                a[i + 1] = is_neg_res - 1  # 10 у следующего разряда
+                res[length - 1 - i] += 10 + sign * (b[i] - a[i])
+                res[length - 2 - i] = res[length - 1 - i] // 10
+                res[length - 1 - i] = res[length - 1 - i] % 10
+            # Выполняем операцию с последним разрядом
+            a[length - 1] += (length - 1 < self_len) * int(self.value[0])
+            b[length - 1] += (length - 1 < self_other) * int(other.value[0])
+            # Записываем в строку последний разряд
+            res[0] += sign * (b[length - 1] - a[length - 1])
+            return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
+        else:
+            return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
 
     # Обработка для выходных данных
     def __str__(self):
