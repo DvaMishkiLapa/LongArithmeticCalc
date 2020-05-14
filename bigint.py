@@ -70,6 +70,14 @@ class BigInt(object):
     def __ge__(self, other):
         return self > other or self == other
 
+    # Унарный плюс (просто копируем значение числа)
+    def __pos__(self):
+        return BigInt(self)
+
+    # Унарный минус
+    def __neg__(self):
+        return BigInt(self.value if self.is_neg else '-' + self.value)
+
     # Обработка для выходных данных
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
