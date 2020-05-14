@@ -39,16 +39,21 @@ class BigInt(object):
 
     # Перегрузка x < y
     def __lt__(self, other):
-        # Если self - отрицательный, other - положительный = True
-        if self.is_neg and not other.is_neg:
-            return True
-        # Если self - положительный, other - отрицательный = False
-        if not self.is_neg and other.is_neg:
-            return False
-        # Если оба числа одго знака, сравниваем значение и логически умножаем на значение знака
-        # Python правильно сравнивает строки, в которых находятся числа
+        self_len = len(self.value)  # Запоминаем длину первого числа
+        self_other = len(other.value)  # Запоминаем длину второго числа
+        # Если знаки одинаковые, то проверяем значения
         if self.is_neg == other.is_neg:
-            return (self.value < other.value) and not self.is_neg
+            # Если длины не равны
+            if (self_len != self_other):
+                # Меньше число с меньшей длинной для положительных и с большей длиной для отрицательных
+                return (self_len < self_other) ^ self.is_neg
+            i = 0
+            # Ищем разряд, в котором значения отличаются
+            while (i < self_len and self.value[i] == other.value[i]):
+                i += 1
+            # Если разряд найден, то меньше число с меньшей цифрой для положительных и с большей цифрой для отрицательных, иначе числа равны
+            return (i < self_len) and ((self.value[i] < other.value[i]) ^ self.is_neg)
+        return self.is_neg  # Знаки разные, если число отрицательное, то оно меньше, если положительное, то больше
 
     # Перегрузка x <= y
     def __le__(self, other):
