@@ -37,6 +37,39 @@ class BigInt(object):
     def __abs__(self):
         return self.value
 
+    # Перегрузка x < y
+    def __lt__(self, other):
+        # Если self - отрицательный, other - положительный = True
+        if self.is_neg and not other.is_neg:
+            return True
+        # Если self - положительный, other - отрицательный = False
+        if not self.is_neg and other.is_neg:
+            return False
+        # Если оба числа одго знака, сравниваем значение и логически умножаем на значение знака
+        # Python правильно сравнивает строки, в которых находятся числа
+        if self.is_neg == other.is_neg:
+            return (self.value < other.value) and not self.is_neg
+
+    # Перегрузка x <= y
+    def __le__(self, other):
+        return self < other or self == other
+
+    # Перегрузка x == y
+    def __eq__(self, other):
+        return (self.value == other.value) and (self.is_neg == other.is_neg)
+
+    # Перегрузка x != y
+    def __ne__(self, other):
+        return (self.value != other.value) or (self.is_neg != other.is_neg)
+
+    # Перегрузка x > y
+    def __gt__(self, other):
+        return not (self < other or self == other)
+
+    # Перегрузка x >= y
+    def __ge__(self, other):
+        return self > other or self == other
+
     # Обработка для выходных данных
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
