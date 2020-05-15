@@ -105,6 +105,7 @@ class BigInt(object):
                 res[j] += int((num2[other_len - 1 - i] if i < other_len else '0')) + int((self.value[self_len - 1 - i] if i < self_len else '0'))
                 res[j - 1] = res[j] // 10  # Выполняем перенос в следущий разряд, если он был
                 res[j] = res[j] % 10  # Оставляем только единицы от возможного переноса и превращаем символ в цифру
+                # Возвращаем результат, учитывая его знак
             return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
         else:
             # Если одно из чисел отрицательное, а другое положительное, отправляем на вычитание, меняя знак
@@ -139,9 +140,42 @@ class BigInt(object):
             b[length - 1] += (length - 1 < self_other) * int(other.value[0])
             # Записываем в строку последний разряд
             res[0] += sign * (b[length - 1] - a[length - 1])
+            # Возвращаем результат, учитывая его знак
             return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
         else:
             return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
+
+    # Умножение двух чисел
+    def __mul__(self, other):
+        # Если один из множителей равен нулю, то результат равен нулю
+        if self.value == '0' and other.value == '0':
+            return 0
+        self_len = len(self.value)  # Запоминаем длину первого числа
+        other_len = len(other.value)  # Запоминаем длину второго числа
+        length = self_len + other_len + 1  # Резульат влезет в сумму длин + 1 из-за возможного переноса
+        # Флаг отрицательности результата - отрицательный, если числа разных знаков
+        is_neg_res = self.is_neg ^ other.is_neg
+        if length < 10:  # Число небольшое, можно по нормальному
+            res = int(self.value) * int(other.value)
+            return BigInt(-res if is_neg_res else res)
+        else:  # Умножаем в столбик
+            # Массивы аргументов
+            a = [0 for _ in range(length)]
+            b = [0 for _ in range(length)]
+            res = [0 for _ in range(length)]
+            # Заполняем массивы инверсной записью чисел (с ведущими нулями)
+            for i in range(length):
+                a[i] = int(self.value[self_len - 1 - i]) if i < self_len else 0
+                b[i] = int(other.value[other_len - 1 - i]) if i < other_len else 0
+                res[i] = 0
+            # Выполняем умножение "в столбик"
+            for i in range(self_len):
+                for j in range(other_len):
+                    res[length - 1 - (i + j)] += a[i] * b[j]
+                    res[length - 1 - (i + j + 1)] += res[length - 1 - (i + j)] // 10
+                    res[length - 1 - (i + j)] %= 10
+            # Возвращаем результат, учитывая его знак
+            return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
 
     # Обработка для выходных данных
     def __str__(self):
