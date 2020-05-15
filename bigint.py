@@ -13,7 +13,7 @@ class BigInt(object):
         # Если в конструктор передано целое число
         if isinstance(x, int):
             self.is_neg = x < 0
-            self.value = str(x if x > 0 else -x)
+            self.value = str(x if x >= 0 else -x)
         # Если в конструктор передана строка
         elif isinstance(x, str):
             # Если вдруг пришла пустая строка, пропускаем, оставляем value = 0
