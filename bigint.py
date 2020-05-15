@@ -66,6 +66,10 @@ class BigInt(object):
         v = ''.join(str(x) for x in v).lstrip('0')
         return BigInt('-' + v) if self.is_neg else BigInt(v)
 
+    # Перегрузка перевода в bool
+    def __bool__(self):
+        return self.value != '0'
+
     # Перегрузка x < y
     def __lt__(self, other):
         self_len = len(self.value)  # Запоминаем длину первого числа
