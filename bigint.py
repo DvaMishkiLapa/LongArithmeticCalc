@@ -19,6 +19,7 @@ class BigInt(object):
             # Если вдруг пришла пустая строка, пропускаем, оставляем value = 0
             if not len(x):
                 pass
+            else:
             self.is_neg = x[0] == '-'
             # Значением будет все, после минуса, если он был. И убираем ведущие нули, если они были
             self.value = x[self.is_neg:].lstrip('0')
