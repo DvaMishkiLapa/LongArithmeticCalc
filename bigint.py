@@ -37,7 +37,34 @@ class BigInt(object):
 
     # Перегрузка числа по модулю
     def __abs__(self):
-        return self.value
+        return BigInt(self.value)
+
+    def bipow(self, n):
+        # Любое число в степени 0 = 1
+        if not n:
+            return BigInt(1)
+        if n & 1:
+            return BigInt(self.bipow(n - 1)) * self
+        else:
+            tmp = BigInt(self.bipow(n // 2))
+            return BigInt(tmp * tmp)
+
+    def bisqrt(self, n):
+        # Корень из n < 2 не имеет смысла
+        # И да, корень извлекать можем только из положительного числа
+        if (n < 2) or self.is_neg:
+            return None
+        self_abs = abs(self)
+        length = (len(self.value) + 1) // 2
+        index = 0
+        v = [0 for _ in range(length)]
+        while index < length:
+            v[index] = 9
+            while BigInt(''.join(str(x) for x in v)).bipow(n) > self_abs and v[index] > 0:
+                v[index] -= 1
+            index += 1
+        v = ''.join(str(x) for x in v).lstrip('0')
+        return BigInt('-' + v) if self.is_neg else BigInt(v)
 
     # Перегрузка x < y
     def __lt__(self, other):
