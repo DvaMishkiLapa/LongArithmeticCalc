@@ -116,7 +116,7 @@ class BigInt(object):
     def __sub__(self, other):
         # Если числа равны, считать не нужно
         if self == other:
-            return 0
+            return BigInt(0)
         # Если оба числа положительные, выполняем вычитание
         if not self.is_neg and not other.is_neg:
             self_len = len(self.value)  # Запоминаем длину первого числа
@@ -150,7 +150,7 @@ class BigInt(object):
     def __mul__(self, other):
         # Если один из множителей равен нулю, то результат равен нулю
         if self.value == '0' and other.value == '0':
-            return 0
+            return BigInt(0)
         self_len = len(self.value)  # Запоминаем длину первого числа
         other_len = len(other.value)  # Запоминаем длину второго числа
         length = self_len + other_len + 1  # Резульат влезет в сумму длин + 1 из-за возможного переноса
@@ -185,14 +185,14 @@ class BigInt(object):
         if value2[0] == '0':
             return None  # Нельзя делить на ноль
         if value1[0] == '0':
-            return 0  # А вот ноль делить можно на всё, кроме нуля, но смысл
+            return BigInt(0)  # А вот ноль делить можно на всё, кроме нуля, но смысл
         if value2 == '1':
             return BigInt(-BigInt(self) if other.is_neg else BigInt(self))  # Делить на 1 можно, но смысл?
         zeroes = 0
         while value2[len(value2) - 1 - zeroes] == '0':
             zeroes += 1
         if zeroes >= len(value1):
-            return 0
+            return BigInt(0)
         # Избавляемся от общих нулей в конце чисел
         if zeroes:
             value1 = value1[:len(value1) - zeroes]
@@ -244,11 +244,12 @@ class BigInt(object):
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
 
+    # Остаток от деления
     def __mod__(self, other):
         if other.value[0] == '0':
             return None
         if self.value[0] == '0' or other.value == "1":
-            return 0
+            return BigInt(0)
         # Если числа меньше 9, можно посчитать по нормальному
         if len(self.value) < 9 and len(other.value) < 9:
             res = int(self.value) % int(other.value)
@@ -263,7 +264,7 @@ class BigInt(object):
         v = ''
         mod = None
         while BigInt(v) < tmp and index < length:
-            v += value[index]
+            v = v + self.value[index]
             index += 1
         while True:
             if BigInt(v) >= tmp:
@@ -276,13 +277,16 @@ class BigInt(object):
                     v = mod.value
             if index <= length:
                 mod2 = v
-                v = v + value[index]
+                try:
+                    v = v + self.value[index]
+                except IndexError:
+                    return -BigInt(mod2) if self.is_neg else BigInt(mod2)
                 index += 1
             if not (index <= length):
                 break
         if (mod2.value == "0"):
-            return 0
-        return -BigInt(mod2) if self.is_neg else mod2
+            return BigInt(0)
+        return -BigInt(mod2) if self.is_neg else BigInt(mod2)
 
 
 if __name__ == '__main__':
