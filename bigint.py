@@ -17,9 +17,7 @@ class BigInt(object):
         # Если в конструктор передана строка
         elif isinstance(x, str):
             # Если вдруг пришла пустая строка, пропускаем, оставляем value = 0
-            if not len(x):
-                pass
-            else:
+            if len(x):
                 self.is_neg = x[0] == '-'
                 # Значением будет все, после минуса, если он был. И убираем ведущие нули, если они были
                 self.value = x[self.is_neg:].lstrip('0')
@@ -32,7 +30,7 @@ class BigInt(object):
             self.is_neg = x.is_neg
 
     # Является ли число четным
-    def is_iven(self):
+    def is_even(self):
         return int(self.value[len(self.value) - 1]) % 2 == 0
 
     # Перегрузка числа по модулю
