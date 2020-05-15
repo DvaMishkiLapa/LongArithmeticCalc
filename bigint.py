@@ -177,6 +177,68 @@ class BigInt(object):
             # Возвращаем результат, учитывая его знак
             return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
 
+    # Деление одного числа на другое
+    def __truediv__(self, other):
+        value1 = self.value  # Запоминаем значение первого числа
+        value2 = other.value  # Запоминаем значение второго числа
+        if value2[0] == '0':
+            return None  # Нельзя делить на ноль
+        if value1[0] == '0':
+            return 0  # А вот ноль делить можно на всё, кроме нуля, но смысл
+        if value2 == '1':
+            return BigInt(-BigInt(self) if other.is_neg else BigInt(self))  # Делить на 1 можно, но смысл?
+        zeroes = 0
+        while value2[len(value2) - 1 - zeroes] == '0':
+            zeroes += 1
+        if zeroes >= len(value1):
+            return 0
+        # Избавляемся от общих нулей в конце чисел
+        if zeroes:
+            value1 = value1[:len(value1) - zeroes]
+            value2 = value2[:len(value2) - zeroes]
+        is_neg_res = self.is_neg ^ other.is_neg  # Cчитаем знак числа
+        tmp = BigInt(value2)
+        divider_length = len(value2)  # Запоминаем длину делителя
+        # Если длина больше 8, то обнуляем делитель, иначе переводим строку в long
+        # Можно не обнулять, но мы думаем, что Python не умеет в большие числа
+        divider_v = 0 if divider_length > 8 else int(value2)
+        length = len(value1)  # Получаем длину делимого
+        index = 0  # Стартуем с нулевого индекса
+        div = ''  # Строка результата деления
+        v = ''  # Строка подчисла (которое делится на делитель в столбик)
+        # Формируем начальное число для деления
+        while BigInt(v) < tmp and index < length:
+            v = v + value1[index]
+            index += 1
+        mod = None
+        while True:
+            count = 0  # Результат деления подчисла на делитель
+            # Если можем разделить, то делим
+            if BigInt(v) >= tmp:
+                # Если не входит в long, то делим с помощью вычитания
+                if (divider_length > 8):
+                    mod = BigInt(v)
+                    while mod >= tmp:
+                        mod = (mod - tmp).copy()
+                        count += 1
+                    v = mod.value
+                else:
+                    mod = int(v)
+                    count = mod // divider_v
+                    v = str(mod % divider_v)
+            # Если не делили, то добавили ноль к результату, иначе добавили результат дедения
+            div = div + (str(count) if count else '0')
+            if index <= length:
+                try:  # Тот самый ноль, лучше не спрашивать
+                    v = v + value1[index]
+                except IndexError:
+                    v = v + '0'
+                index += 1  # Формируем новое значение для подчисла
+            if not (index <= length):
+                break
+        # Возвращаем результат учитывая знак и возможное равенство нулю
+        return BigInt('-' + div if is_neg_res and div != '0' else div)
+
     # Обработка для выходных данных
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
