@@ -20,12 +20,12 @@ class BigInt(object):
             if not len(x):
                 pass
             else:
-            self.is_neg = x[0] == '-'
-            # Значением будет все, после минуса, если он был. И убираем ведущие нули, если они были
-            self.value = x[self.is_neg:].lstrip('0')
-            # Проверяем, является ли строка числом, если нет, value = 0
-            if not self.value.isdigit():
-                self.value = '0'
+                self.is_neg = x[0] == '-'
+                # Значением будет все, после минуса, если он был. И убираем ведущие нули, если они были
+                self.value = x[self.is_neg:].lstrip('0')
+                # Проверяем, является ли строка числом, если нет, value = 0
+                if not self.value.isdigit():
+                    self.value = '0'
         # Если в конструктор передан экземпляр того же класса, копируем его содержимое
         elif isinstance(x, BigInt):
             self.value = x.value
@@ -243,6 +243,46 @@ class BigInt(object):
     # Обработка для выходных данных
     def __str__(self):
         return str('-' if self.is_neg else '') + self.value
+
+    def __mod__(self, other):
+        if other.value[0] == '0':
+            return None
+        if self.value[0] == '0' or other.value == "1":
+            return 0
+        # Если числа меньше 9, можно посчитать по нормальному
+        if len(self.value) < 9 and len(other.value) < 9:
+            res = int(self.value) % int(other.value)
+            return BigInt(-res if self.is_neg else res)
+        tmp = BigInt(other.value)
+        divider_length = len(other.value)  # запоминаем длину делителя
+        # Если длина больше 9, то обнуляем long'овый делитель, иначе переводим строку в long
+        divider_v = 0 if divider_length >= 9 else int(other.value)
+        length = len(self.value)
+        index = 0
+        mod2 = self.copy()
+        v = ''
+        mod = None
+        while BigInt(v) < tmp and index < length:
+            v += value[index]
+            index += 1
+        while True:
+            if BigInt(v) >= tmp:
+                if divider_v:
+                    v = str(int(v) % divider_v)
+                else:
+                    mod = BigInt(v)
+                    while mod >= tmp:
+                        mod = (mod - tmp).copy()
+                    v = mod.value
+            if index <= length:
+                mod2 = v
+                v = v + value[index]
+                index += 1
+            if not (index <= length):
+                break
+        if (mod2.value == "0"):
+            return 0
+        return -BigInt(mod2) if self.is_neg else mod2
 
 
 if __name__ == '__main__':
