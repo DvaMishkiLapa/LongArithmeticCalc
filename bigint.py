@@ -47,7 +47,7 @@ class BigInt(object):
             tmp = BigInt(self.bipow(n // 2))
             return BigInt(tmp * tmp)
 
-    def bisqrt(self, n):
+    def birt(self, n):
         """Вычисление корня степени `n` из числа"""
         # Корень из n < 2 не имеет смысла
         # И да, корень извлекать можем только из положительного числа
