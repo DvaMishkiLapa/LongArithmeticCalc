@@ -179,7 +179,7 @@ class BigInt(object):
             # Записываем в строку последний разряд
             res[0] += sign * (b[length - 1] - a[length - 1])
             # Возвращаем результат, учитывая его знак
-            return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
+            return BigInt(('-' if is_neg_res else '') + ''.join(str(x) for x in res))
         else:
             return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
 
