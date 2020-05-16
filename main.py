@@ -11,6 +11,8 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         super().__init__()
         self.setupUi(self)
 
+        self.error_message = 'Ошибка ввода :('
+
         # Events кнопок меню описания и выбора файла
         self.addition.clicked.connect(self.addition_clicked)                # +
         self.subtraction.clicked.connect(self.subtraction_clicked)          # -
@@ -33,75 +35,67 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
 
     def addition_clicked(self):  # +
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num) + BigInt(second_num))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def subtraction_clicked(self):  # -
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num) - BigInt(second_num))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def multiplication_clicked(self):  # *
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num) * BigInt(second_num))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def division_clicked(self):  # /
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num) / BigInt(second_num))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def exponentiation_clicked(self):  # ^
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num).bipow(int(second_num)))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def root_clicked(self):  # √
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num).birt(int(second_num)))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def gdc_clicked(self):  # НОД
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(GCD(BigInt(first_num), BigInt(second_num)))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
     def remainder_clicked(self):  # ОСТ
         first_num, second_num = self.get_nums()
-        valid = self.data_validation(first_num) and self.data_validation(second_num)
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num) % BigInt(second_num))
             self.result.setText(res)
         else:
-            self.result.setText('Ошибка ввода :(')
+            self.result.setText(self.error_message)
 
 
 def main():
