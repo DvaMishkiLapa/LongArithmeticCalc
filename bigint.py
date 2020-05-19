@@ -36,36 +36,35 @@ class BigInt(object):
     # Является ли число четным
     def is_even(self):
         """Является ли число четным"""
-        return int(self.value[len(self.value) - 1]) % 2 == 0
+        return not (int(self.value[-1]) & 1)
 
     # Перегрузка числа по модулю
     def __abs__(self):
         return BigInt(self.value)
 
     def bipow(self, n):
-        """Возведение числа в степень `n``"""
+        """Возведение числа в степень `n`"""
         # Любое число в степени 0 = 1
         if not n:
             return BigInt(1)
         if n & 1:
             return BigInt(self.bipow(n - 1)) * self
-        else:
-            tmp = BigInt(self.bipow(n // 2))
-            return BigInt(tmp * tmp)
+        tmp = BigInt(self.bipow(n // 2))
+        return BigInt(tmp * tmp)
 
     def birt(self, n):
         """Вычисление корня степени `n` из числа"""
-        # Корень из n < 2 не имеет смысла
-        # И да, корень извлекать можем только из положительного числа
-        if (n < 2) or self.is_neg:
+        # Корень извлекать можем только из положительного числа
+        if (n < 0) or self.is_neg:
             return None
-        self_abs = abs(self)
+        if n == 1:
+            return BigInt(self)
         length = (len(self.value) + 1) // 2
         index = 0
-        v = [0 for _ in range(length)]
+        v = [0] * length
         while index < length:
             v[index] = 9
-            while BigInt(''.join(str(x) for x in v)).bipow(n) > self_abs and v[index] > 0:
+            while BigInt(''.join(str(x) for x in v)).bipow(n) > self and v[index]:
                 v[index] -= 1
             index += 1
         v = ''.join(str(x) for x in v).lstrip('0')
@@ -82,7 +81,7 @@ class BigInt(object):
         # Если знаки одинаковые, то проверяем значения
         if self.is_neg == other.is_neg:
             # Если длины не равны
-            if (self_len != self_other):
+            if self_len != self_other:
                 # Меньше число с меньшей длинной для положительных и с большей длиной для отрицательных
                 return (self_len < self_other) ^ self.is_neg
             i = 0
@@ -103,7 +102,7 @@ class BigInt(object):
 
     # Перегрузка x != y
     def __ne__(self, other):
-        return (self.value != other.value) or (self.is_neg != other.is_neg)
+        return not self == other
 
     # Перегрузка x > y
     def __gt__(self, other):
@@ -130,13 +129,13 @@ class BigInt(object):
     def __add__(self, other):
         new_int = BigInt()
         # Если знаки одинаковые, то выполняем сложение
-        if not (other.is_neg ^ self.is_neg):
+        if other.is_neg == self.is_neg:
             num2 = other.value  # Запоминаем значение второго операнда
             self_len = len(self.value)  # Длинна первого операнда
             other_len = len(num2)  # Длинна второго операнда
             # Длина суммы равна максимуму из двух длин + 1 из-за возможного переноса разряда
             length = max(self_len, other_len) + 1
-            res = [0 for _ in range(length)]
+            res = [0] * length
             for i in range(length - 1):
                 j = length - 1 - i
                 # Выполняем сложение разрядов
@@ -145,9 +144,8 @@ class BigInt(object):
                 res[j] = res[j] % 10  # Оставляем только единицы от возможного переноса и превращаем символ в цифру
                 # Возвращаем результат, учитывая его знак
             return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
-        else:
-            # Если одно из чисел отрицательное, а другое положительное, отправляем на вычитание, меняя знак
-            return (self - (-BigInt(other))) if self.is_neg else (other - (-BigInt(self)))
+        # Если одно из чисел отрицательное, а другое положительное, отправляем на вычитание, меняя знак
+        return (self - (-BigInt(other))) if self.is_neg else (other - (-BigInt(self)))
 
     # Вычитание одного числа из другого
     def __sub__(self, other):
@@ -161,9 +159,9 @@ class BigInt(object):
             length = max(self_len, self_other)  # Длина результата не превысит максимума длин чисел
             is_neg_res = other > self  # Определяем знак результата
             # Массивы аргументов
-            a = [0 for _ in range(length)]
-            b = [0 for _ in range(length)]
-            res = [0 for _ in range(length)]
+            a = [0] * length
+            b = [0] * length
+            res = [0] * length
             sign = 2 * is_neg_res - 1  # Получаем числовое значение знака результата
             for i in range(length - 1):
                 a[i] += int(self.value[self_len - 1 - i]) if i < self_len else 0  # Формируем разряды
@@ -198,9 +196,9 @@ class BigInt(object):
             return BigInt(-res if is_neg_res else res)
         else:  # Умножаем в столбик
             # Массивы аргументов
-            a = [0 for _ in range(length)]
-            b = [0 for _ in range(length)]
-            res = [0 for _ in range(length)]
+            a = [0] * length
+            b = [0] * length
+            res = [0] * length
             # Заполняем массивы инверсной записью чисел (с ведущими нулями)
             for i in range(length):
                 a[i] = int(self.value[self_len - 1 - i]) if i < self_len else 0
@@ -220,7 +218,7 @@ class BigInt(object):
         value1 = self.value  # Запоминаем значение первого числа
         value2 = other.value  # Запоминаем значение второго числа
         if value2[0] == '0':
-            return None  # Нельзя делить на ноль
+            raise ZeroDivisionError  # Нельзя делить на ноль
         if value1[0] == '0':
             return BigInt(0)  # А вот ноль делить можно на всё, кроме нуля, но смысл
         if value2 == '1':
@@ -334,10 +332,4 @@ def GCD(a, b):
 
 
 if __name__ == '__main__':
-    a = BigInt(12310)
-    b = BigInt(15)
-
-    res = GCD(a, b)
-    print(res)
-    # lal(1)
-    # print(abs(a.bisqrt(25)))
+    pass
