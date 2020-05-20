@@ -28,6 +28,8 @@ class BigInt(object):
                 # Проверяем, является ли строка числом, если нет, value = 0
                 if not self.value.isdigit():
                     self.value = '0'
+                if self.value == '0':
+                    self.is_neg = False
         # Если в конструктор передан экземпляр того же класса, копируем его содержимое
         elif isinstance(x, BigInt):
             self.value = x.value

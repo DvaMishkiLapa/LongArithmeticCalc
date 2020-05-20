@@ -25,8 +25,8 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.root.clicked.connect(self.root_clicked)                        # √
         self.gdc.clicked.connect(self.gdc_clicked)                          # НОД
         self.remainder.clicked.connect(self.remainder_clicked)              # ОСТ
-        self.about.clicked.connect(self.about_clicked)              # ОСТ
-        self.helpme.clicked.connect(self.helpme_clicked)              # ОСТ
+        self.about.clicked.connect(self.about_clicked)
+        self.helpme.clicked.connect(self.helpme_clicked)
 
     def get_nums(self):
         return self.first_num_edit.toPlainText(), self.second_num_edit.toPlainText()
