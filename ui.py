@@ -22,7 +22,7 @@ class Ui_MainWindow(object):
         font.setPointSize(12)
         MainWindow.setFont(font)
         icon = QtGui.QIcon()
-        icon.addPixmap(QtGui.QPixmap(".\\ui\\img/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
+        icon.addPixmap(QtGui.QPixmap(".\\ui\\../img/logo.png"), QtGui.QIcon.Normal, QtGui.QIcon.Off)
         MainWindow.setWindowIcon(icon)
         MainWindow.setWindowOpacity(1.0)
         self.centralwidget = QtWidgets.QWidget(MainWindow)
