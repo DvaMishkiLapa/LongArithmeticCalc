@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from sys import setrecursionlimit
 
 setrecursionlimit(1500)  # Максимальный стек рекурсии
@@ -334,4 +337,10 @@ def GCD(a, b):
 
 
 if __name__ == '__main__':
-    pass
+    a = BigInt('-0')
+    b = BigInt('0')
+    print(a < b)
+    print(a > b)
+    print(a == b)
+
+

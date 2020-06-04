@@ -1,3 +1,6 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from sys import argv
 
 from PyQt5 import QtCore, QtGui, QtWidgets
