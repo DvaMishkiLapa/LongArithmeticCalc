@@ -1,0 +1,88 @@
+<?xml version="1.0" encoding="UTF-8"?>
+<ui version="4.0">
+ <class>helpme</class>
+ <widget class="QDialog" name="helpme">
+  <property name="geometry">
+   <rect>
+    <x>0</x>
+    <y>0</y>
+    <width>600</width>
+    <height>435</height>
+   </rect>
+  </property>
+  <property name="sizePolicy">
+   <sizepolicy hsizetype="Fixed" vsizetype="Fixed">
+    <horstretch>0</horstretch>
+    <verstretch>0</verstretch>
+   </sizepolicy>
+  </property>
+  <property name="minimumSize">
+   <size>
+    <width>600</width>
+    <height>435</height>
+   </size>
+  </property>
+  <property name="maximumSize">
+   <size>
+    <width>600</width>
+    <height>435</height>
+   </size>
+  </property>
+  <property name="font">
+   <font>
+    <family>Hack</family>
+    <pointsize>12</pointsize>
+   </font>
+  </property>
+  <property name="windowTitle">
+   <string>Помощь</string>
+  </property>
+  <property name="windowIcon">
+   <iconset>
+    <normaloff>img/logo.png</normaloff>img/logo.png</iconset>
+  </property>
+  <property name="modal">
+   <bool>true</bool>
+  </property>
+  <layout class="QVBoxLayout" name="verticalLayout">
+   <property name="spacing">
+    <number>5</number>
+   </property>
+   <property name="leftMargin">
+    <number>5</number>
+   </property>
+   <property name="topMargin">
+    <number>5</number>
+   </property>
+   <property name="rightMargin">
+    <number>5</number>
+   </property>
+   <property name="bottomMargin">
+    <number>5</number>
+   </property>
+   <item>
+    <widget class="QLabel" name="help_label">
+     <property name="font">
+      <font>
+       <family>Hack</family>
+      </font>
+     </property>
+     <property name="text">
+      <string>&lt;html&gt;&lt;head/&gt;&lt;body&gt;&lt;p align=&quot;center&quot;&gt;Помощь:&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;1. В случае с +, -, * и / программа работает по принципу:&lt;br/&gt;[первое число] [дейстивие] [второе число]&lt;br/&gt;&lt;br/&gt;2. В случае ^ программа работает по принципу:&lt;br/&gt;[первое число] в степени [второе число]&lt;br/&gt;&lt;br/&gt;3. В случае √ программа работает по принципу:&lt;br/&gt;корень в степени[второе число] от [первое число]&lt;br/&gt;&lt;br/&gt;4. В случае НОД программа ищет наибольший общий делитель.&lt;br/&gt;&lt;/p&gt;&lt;p align=&quot;justify&quot;&gt;5. В случае ОСТ программа ищет остаток от деление первого числа на второе число.&lt;/p&gt;&lt;/body&gt;&lt;/html&gt;</string>
+     </property>
+     <property name="alignment">
+      <set>Qt::AlignLeading|Qt::AlignLeft|Qt::AlignVCenter</set>
+     </property>
+     <property name="wordWrap">
+      <bool>true</bool>
+     </property>
+     <property name="margin">
+      <number>5</number>
+     </property>
+    </widget>
+   </item>
+  </layout>
+ </widget>
+ <resources/>
+ <connections/>
+</ui>

@@ -1,6 +1,12 @@
+#!/usr/bin/python3
+# -*- coding: utf-8 -*-
+
 from sys import argv
+
 from PyQt5 import QtCore, QtGui, QtWidgets
 
+import about
+import helpme
 import ui
 from bigint import GCD, BigInt
 
@@ -22,6 +28,8 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.root.clicked.connect(self.root_clicked)                        # √
         self.gdc.clicked.connect(self.gdc_clicked)                          # НОД
         self.remainder.clicked.connect(self.remainder_clicked)              # ОСТ
+        self.about.clicked.connect(self.about_clicked)
+        self.helpme.clicked.connect(self.helpme_clicked)
 
     def get_nums(self):
         return self.first_num_edit.toPlainText(), self.second_num_edit.toPlainText()
@@ -96,6 +104,29 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
             self.result.setText(res)
         else:
             self.result.setText(self.error_message)
+
+    def about_clicked(self):  # about
+        about_dialog = about()
+        about_dialog.exec_()
+
+    def helpme_clicked(self):  # Помощь
+        helpme_dialog = helpme()
+        helpme_dialog.exec_()
+
+
+class about(QtWidgets.QDialog, about.Ui_Dialog):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
+        pixmap = QtGui.QPixmap('./img/math_logo.png')
+        self.ejik.setPixmap(pixmap)
+        self.resize(pixmap.width(), pixmap.height())
+
+
+class helpme(QtWidgets.QDialog, helpme.Ui_helpme):
+    def __init__(self):
+        super().__init__()
+        self.setupUi(self)
 
 
 def main():
