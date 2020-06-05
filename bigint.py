@@ -280,7 +280,7 @@ class BigInt(object):
 
     # Обработка для выходных данных
     def __str__(self):
-        return '-' if self.is_neg else '' + self.value
+        return str('-' if self.is_neg else '') + self.value
 
     # Остаток от деления
     def __mod__(self, other):
