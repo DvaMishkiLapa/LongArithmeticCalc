@@ -1,0 +1,31 @@
+\documentclass[14pt, a4paper]{extarticle}
+\usepackage[T2A]{fontenc}
+\usepackage[utf8]{inputenc}
+\usepackage[english, russian]{babel}
+\usepackage{amssymb, amsfonts, amsmath, amsthm, microtype, pdfpages, indentfirst, listings}
+
+\usepackage[left=3cm, right=1.5cm, top=2cm, bottom=2cm]{geometry}
+\usepackage{setspace}
+\onehalfspacing
+\usepackage{xcolor} % Подстветка ^_^
+\lstset{
+    basicstyle=\small\ttfamily,
+    % columns=fullflexible,
+    frame=tb, % draw a frame at the top and bottom of the code block
+    tabsize=1, % tab space width
+    showstringspaces=false, % don't mark spaces in strings
+    % numbers=left, % display line numbers on the left
+    commentstyle=\color{green}, % comment color
+    keywordstyle=\color{blue}, % keyword color
+    stringstyle=\color{red} % string color
+}
+
+\usepackage[hang, flushmargin]{footmisc}
+\usepackage[unicode]{hyperref}
+\usepackage{footnotebackref}
+
+\begin{document}
+    \includepdf{tp-output.pdf}
+    \tableofcontents
+    \include{main}
+\end{document}
