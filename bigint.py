@@ -145,7 +145,7 @@ class BigInt(object):
                 j = length - 1 - i
                 # Выполняем сложение разрядов
                 res[j] += int((num2[other_len - 1 - i] if i < other_len else '0')) + int((self.value[self_len - 1 - i] if i < self_len else '0'))
-                res[j - 1] = res[j] // 10  # Выполняем перенос в следущий разряд, если он был
+                res[j - 1] = res[j] // 10  # Выполняем перенос в следующий разряд, если он был
                 res[j] = res[j] % 10  # Оставляем только единицы от возможного переноса и превращаем символ в цифру
                 # Возвращаем результат, учитывая его знак
             return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
@@ -183,17 +183,16 @@ class BigInt(object):
             res[0] += sign * (b[length - 1] - a[length - 1])
             # Возвращаем результат, учитывая его знак
             return BigInt(('-' if is_neg_res else '') + ''.join(str(x) for x in res))
-        else:
-            return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
+        return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
 
     # Умножение двух чисел
     def __mul__(self, other):
         # Если один из множителей равен нулю, то результат равен нулю
-        if self.value == '0' and other.value == '0':
+        if self.value == '0' or other.value == '0':
             return BigInt(0)
         self_len = len(self.value)  # Запоминаем длину первого числа
         other_len = len(other.value)  # Запоминаем длину второго числа
-        length = self_len + other_len + 1  # Резульат влезет в сумму длин + 1 из-за возможного переноса
+        length = self_len + other_len + 1  # Результат влезет в сумму длин + 1 из-за возможного переноса
         # Флаг отрицательности результата - отрицательный, если числа разных знаков
         is_neg_res = self.is_neg ^ other.is_neg
         if length < 10:  # Число небольшое, можно по нормальному
@@ -208,7 +207,6 @@ class BigInt(object):
             for i in range(length):
                 a[i] = int(self.value[self_len - 1 - i]) if i < self_len else 0
                 b[i] = int(other.value[other_len - 1 - i]) if i < other_len else 0
-                res[i] = 0
             # Выполняем умножение "в столбик"
             for i in range(self_len):
                 for j in range(other_len):
@@ -222,9 +220,9 @@ class BigInt(object):
     def __truediv__(self, other):
         value1 = self.value  # Запоминаем значение первого числа
         value2 = other.value  # Запоминаем значение второго числа
-        if value2[0] == '0':
+        if value2 == '0':
             raise ZeroDivisionError  # Нельзя делить на ноль
-        if value1[0] == '0':
+        if value1 == '0':
             return BigInt(0)  # А вот ноль делить можно на всё, кроме нуля, но смысл
         if value2 == '1':
             return BigInt(-BigInt(self) if other.is_neg else BigInt(self))  # Делить на 1 можно, но смысл?
@@ -257,7 +255,7 @@ class BigInt(object):
             # Если можем разделить, то делим
             if BigInt(v) >= tmp:
                 # Если не входит в long, то делим с помощью вычитания
-                if (divider_length > 8):
+                if divider_length > 8:
                     mod = BigInt(v)
                     while mod >= tmp:
                         mod = (mod - tmp).copy()
@@ -267,7 +265,7 @@ class BigInt(object):
                     mod = int(v)
                     count = mod // divider_v
                     v = str(mod % divider_v)
-            # Если не делили, то добавили ноль к результату, иначе добавили результат дедения
+            # Если не делили, то добавили ноль к результату, иначе добавили результат деления
             div = div + (str(count) if count else '0')
             if index <= length:
                 try:  # Тот самый ноль, лучше не спрашивать
@@ -282,13 +280,13 @@ class BigInt(object):
 
     # Обработка для выходных данных
     def __str__(self):
-        return str('-' if self.is_neg else '') + self.value
+        return '-' if self.is_neg else '' + self.value
 
     # Остаток от деления
     def __mod__(self, other):
-        if other.value[0] == '0':
+        if other.value == '0':
             return None
-        if self.value[0] == '0' or other.value == "1":
+        if self.value == '0' or other.value == "1":
             return BigInt(0)
         # Если числа меньше 9, можно посчитать по нормальному
         if len(self.value) < 9 and len(other.value) < 9:
@@ -296,8 +294,8 @@ class BigInt(object):
             return BigInt(-res if self.is_neg else res)
         tmp = BigInt(other.value)
         divider_length = len(other.value)  # запоминаем длину делителя
-        # Если длина больше 9, то обнуляем long'овый делитель, иначе переводим строку в long
-        divider_v = 0 if divider_length >= 9 else int(other.value)
+        # Если длина больше 8, то обнуляем long'овый делитель, иначе переводим строку в long
+        divider_v = 0 if divider_length > 8 else int(other.value)
         length = len(self.value)
         index = 0
         mod2 = self.copy()
@@ -324,7 +322,7 @@ class BigInt(object):
                 index += 1
             if not (index <= length):
                 break
-        if (mod2.value == "0"):
+        if mod2.value == '0':
             return BigInt(0)
         return -BigInt(mod2) if self.is_neg else BigInt(mod2)
 
@@ -337,10 +335,6 @@ def GCD(a, b):
 
 
 if __name__ == '__main__':
-    a = BigInt('-0')
-    b = BigInt('0')
-    print(a < b)
-    print(a > b)
-    print(a == b)
-
-
+    a = BigInt('111111111111111111111111111111111111111')
+    b = BigInt('1111111111111111')
+    print(a / b)
