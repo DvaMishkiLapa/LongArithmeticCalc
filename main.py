@@ -24,8 +24,8 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         self.subtraction.clicked.connect(self.subtraction_clicked)          # -
         self.multiplication.clicked.connect(self.multiplication_clicked)    # *
         self.division.clicked.connect(self.division_clicked)                # /
-        self.exponentiation.clicked.connect(self.exponentiation_clicked)    # ^
-        self.root.clicked.connect(self.root_clicked)                        # √
+        self.exponentiation.clicked.connect(self.exponentiation_clicked)    # степень
+        self.root.clicked.connect(self.root_clicked)                        # корень
         self.gdc.clicked.connect(self.gdc_clicked)                          # НОД
         self.remainder.clicked.connect(self.remainder_clicked)              # ОСТ
         self.about.clicked.connect(self.about_clicked)
@@ -73,7 +73,7 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         else:
             self.result.setText(self.error_message)
 
-    def exponentiation_clicked(self):  # ^
+    def exponentiation_clicked(self):  # степень
         first_num, second_num = self.get_nums()
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num).bipow(int(second_num)))
@@ -81,7 +81,7 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         else:
             self.result.setText(self.error_message)
 
-    def root_clicked(self):  # √
+    def root_clicked(self):  # корень
         first_num, second_num = self.get_nums()
         if self.data_validation(first_num) and self.data_validation(second_num):
             res = str(BigInt(first_num).birt(int(second_num)))
