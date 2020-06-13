@@ -77,25 +77,21 @@
 \begin{itemize}
     \item Создание экземпляра класса без передачи аргументов. Числовое значение такого экземпляра будет равно нулю.
     \begin{lstlisting}
-a = BigInt()
-    \end{lstlisting}
+a = BigInt()\end{lstlisting}
     \item Создание экземпляра класса с передачей в аргумент строки, которая может валидно быть приведена к типу целого числа.
     \begin{lstlisting}
 a = BigInt('-1234567890')  # a = -1234567890
 b = BigInt('1234567890')   # b = 1234567890
-d = BigInt('0')            # d = 0
-    \end{lstlisting}
+d = BigInt('0')            # d = 0\end{lstlisting}
     \item Создание экземпляра класса с передачей в аргумент целого числа.
     \begin{lstlisting}
 a = BigInt(-1234567890)  # a = -1234567890
 b = BigInt(1234567890)   # b = 1234567890
-d = BigInt(0)            # d = 0
-    \end{lstlisting}
+d = BigInt(0)            # d = 0\end{lstlisting}
     \item Создание экземпляра класса с передачей в аргумент экземпляра класса <<BigInt>>.
     \begin{lstlisting}
 a = BigInt(-1234567890)  # a = -1234567890
-b = BigInt(a)            # b = -1234567890
-    \end{lstlisting}
+b = BigInt(a)            # b = -1234567890\end{lstlisting}
 \end{itemize}
 
 Также в данной библиотеке содержится функция <<GCD>>, реализующая возможность нахождения наибольшего общего делителя.
@@ -112,44 +108,36 @@ b = BigInt(a)            # b = -1234567890
     \begin{lstlisting}
 a = BigInt('-1234567890987654321')
 b = BigInt('9876543210123456789')
-zero = BigInt()
-    \end{lstlisting}
+zero = BigInt()\end{lstlisting}
 
     \begin{itemize}
         \item Выполним сложение:
         \begin{lstlisting}
-print(a + b)
-        \end{lstlisting}
+print(a + b)\end{lstlisting}
         Вывод: $8641975319135802468$
         \item Выполним вычитание:
         \begin{lstlisting}
-print(a - b)
-        \end{lstlisting}
+print(a - b)\end{lstlisting}
         Вывод: $-11111111101111111110$
         \item Выполним умножение:
         \begin{lstlisting}
-print(a * b)
-        \end{lstlisting}
+print(a * b)\end{lstlisting}
         Вывод: $-12193263121170553265523548251112635269$
         \item Выполним целочисленное деление:
         \begin{lstlisting}
-print(a / b)
-        \end{lstlisting}
+print(a / b)\end{lstlisting}
         Вывод: $-8$
         \item Выполним нахождение остатка от деления:
         \begin{lstlisting}
-print(b % a)
-        \end{lstlisting}
+print(b % a)\end{lstlisting}
         Вывод: $82222222221$
         \item Выполним нахождение НОД:
         \begin{lstlisting}
-print(GCD(b, a))
-        \end{lstlisting}
+print(GCD(b, a))\end{lstlisting}
         Вывод: $-9$
         \item Выполняем возведение в степень:
         \begin{lstlisting}
-print(a.bipow(20))
-        \end{lstlisting}
+print(a.bipow(20))\end{lstlisting}
         Вывод:\\
         $67654945781131788253399139476950939867213847384221510782372183$
         $38736383554932818216005379411615896402318839463975841663187950$
@@ -159,23 +147,19 @@ print(a.bipow(20))
         $3028907724064631250587670777171351261244651206462401$
         \item Выполним деление на ноль:
         \begin{lstlisting}
-print(a / zero)
-        \end{lstlisting}
+print(a / zero)\end{lstlisting}
         Вывод: $ZeroDivisionError$
         \item Выполним деление нуля:
         \begin{lstlisting}
-print(zero / b)
-        \end{lstlisting}
+print(zero / b)\end{lstlisting}
         Вывод: $0$
         \item Выполним умножение на ноль:
         \begin{lstlisting}
-print(a * zero)
-        \end{lstlisting}
+print(a * zero)\end{lstlisting}
         Вывод: $0$
         \item Выполняем возведение в степень ноль:
         \begin{lstlisting}
-print(b.bipow(0))
-        \end{lstlisting}
+print(b.bipow(0))\end{lstlisting}
         Вывод: $1$
     \end{itemize}
 
