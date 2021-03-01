@@ -1,4 +1,3 @@
-#!/usr/bin/python3
 # -*- coding: utf-8 -*-
 
 from sys import argv
@@ -105,7 +104,7 @@ class LongArithmeticCalc(QtWidgets.QMainWindow, ui.Ui_MainWindow):
         else:
             self.result.setText(self.error_message)
 
-    def about_clicked(self):  # about
+    def about_clicked(self):  # About
         about_dialog = about()
         about_dialog.exec_()
 
@@ -118,6 +117,7 @@ class about(QtWidgets.QDialog, about.Ui_Dialog):
     def __init__(self):
         super().__init__()
         self.setupUi(self)
+        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
         pixmap = QtGui.QPixmap('./img/math_logo.png')
         self.ejik.setPixmap(pixmap)
         self.resize(pixmap.width(), pixmap.height())
@@ -126,6 +126,7 @@ class about(QtWidgets.QDialog, about.Ui_Dialog):
 class helpme(QtWidgets.QDialog, helpme.Ui_helpme):
     def __init__(self):
         super().__init__()
+        self.setWindowFlags(self.windowFlags() & ~QtCore.Qt.WindowContextHelpButtonHint)
         self.setupUi(self)
 
 
