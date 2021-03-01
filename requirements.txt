@@ -1,3 +1,4 @@
+wheel
 PyQt5
 pyqt5-tools
 auto-py-to-exe
