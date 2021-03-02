@@ -50,6 +50,8 @@ class BigInt(object):
     def bipow(self, n):
         """Возведение числа в степень `n`"""
         # Любое число в степени 0 = 1
+        if n < 0:
+            return None
         if not n:
             return BigInt(1)
         if n & 1:
