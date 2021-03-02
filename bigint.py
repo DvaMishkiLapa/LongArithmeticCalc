@@ -216,7 +216,7 @@ class BigInt(object):
                     res[length - 1 - (i + j + 1)] += res[length - 1 - (i + j)] // 10
                     res[length - 1 - (i + j)] %= 10
             # Возвращаем результат, учитывая его знак
-            return BigInt(('-' if self.is_neg else '') + ''.join(str(x) for x in res))
+            return BigInt(('-' if is_neg_res else '') + ''.join(str(x) for x in res))
 
     # Деление одного числа на другое
     def __truediv__(self, other):
