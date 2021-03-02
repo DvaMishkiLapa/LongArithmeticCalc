@@ -133,3 +133,6 @@ dmypy.json
 
 # VScode
 .vscode/
+
+# Output auto-py-to-exe
+output/
