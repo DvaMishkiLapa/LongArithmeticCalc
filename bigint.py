@@ -318,13 +318,17 @@ class BigInt(object):
                 try:
                     v = v + self.value[index]
                 except IndexError:
-                    return -BigInt(mod2) if self.is_neg else BigInt(mod2)
+                    break
                 index += 1
             if not (index <= length):
                 break
-        if mod2.value == '0':
-            return BigInt(0)
-        return -BigInt(mod2) if self.is_neg else BigInt(mod2)
+        if isinstance(mod2, BigInt):
+            if mod2.value == '0':
+                return BigInt(0)
+        res = -BigInt(mod2) if self.is_neg else BigInt(mod2)
+        if self.is_neg ^ other.is_neg:
+            return other + res
+        return res
 
 
 def GCD(a, b):
