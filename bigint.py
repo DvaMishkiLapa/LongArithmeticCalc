@@ -133,7 +133,6 @@ class BigInt(object):
 
     # Сложение двух чисел
     def __add__(self, other):
-        new_int = BigInt()
         # Если знаки одинаковые, то выполняем сложение
         if other.is_neg == self.is_neg:
             num2 = other.value  # Запоминаем значение второго операнда
