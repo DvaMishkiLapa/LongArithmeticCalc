@@ -64,7 +64,7 @@ class BigInt(object):
         if (n < 0) or self.is_neg:
             return None
         if n == 1:
-            return BigInt(self)
+            return self
         length = (len(self.value) + 1) // 2
         index = 0
         v = [0] * length
@@ -120,7 +120,7 @@ class BigInt(object):
 
     # Унарный плюс (просто копируем значение числа)
     def __pos__(self):
-        return BigInt(self)
+        return self
 
     # Унарный минус
     def __neg__(self):
@@ -139,10 +139,10 @@ class BigInt(object):
             self_len = len(self.value)  # Длинна первого операнда
             other_len = len(num2)  # Длинна второго операнда
             # Длина суммы равна максимуму из двух длин + 1 из-за возможного переноса разряда
-            length = max(self_len, other_len) + 1
-            res = [0] * length
-            for i in range(length - 1):
-                j = length - 1 - i
+            length = max(self_len, other_len)
+            res = [0] * (length + 1)
+            for i in range(length):
+                j = length - i
                 # Выполняем сложение разрядов
                 res[j] += int((num2[other_len - 1 - i] if i < other_len else '0')) + int((self.value[self_len - 1 - i] if i < self_len else '0'))
                 res[j - 1] = res[j] // 10  # Выполняем перенос в следующий разряд, если он был
@@ -161,26 +161,27 @@ class BigInt(object):
         if not self.is_neg and not other.is_neg:
             self_len = len(self.value)  # Запоминаем длину первого числа
             self_other = len(other.value)  # Запоминаем длину второго числа
-            length = max(self_len, self_other)  # Длина результата не превысит максимума длин чисел
+            length = max(self_len, self_other) - 1  # Длина результата не превысит максимума длин чисел
             is_neg_res = other > self  # Определяем знак результата
             # Массивы аргументов
-            a = [0] * length
-            b = [0] * length
-            res = [0] * length
+            new_length = length + 1
+            a = [0] * new_length
+            b = [0] * new_length
+            res = [0] * new_length
             sign = 2 * is_neg_res - 1  # Получаем числовое значение знака результата
-            for i in range(length - 1):
+            for i in range(length):
                 a[i] += int(self.value[self_len - 1 - i]) if i < self_len else 0  # Формируем разряды
                 b[i] += int(other.value[self_other - 1 - i]) if i < self_other else 0  # Из строк аргументов
                 b[i + 1] = -is_neg_res  # В зависимости от знака занимаем или не занимаем
                 a[i + 1] = is_neg_res - 1  # 10 у следующего разряда
-                res[length - 1 - i] += 10 + sign * (b[i] - a[i])
-                res[length - 2 - i] = res[length - 1 - i] // 10
-                res[length - 1 - i] = res[length - 1 - i] % 10
+                res[length - i] += 10 + sign * (b[i] - a[i])
+                res[length - 1 - i] = res[length - i] // 10
+                res[length - i] = res[length - i] % 10
             # Выполняем операцию с последним разрядом
-            a[length - 1] += (length - 1 < self_len) * int(self.value[0])
-            b[length - 1] += (length - 1 < self_other) * int(other.value[0])
+            a[length] += (length < self_len) * int(self.value[0])
+            b[length] += (length < self_other) * int(other.value[0])
             # Записываем в строку последний разряд
-            res[0] += sign * (b[length - 1] - a[length - 1])
+            res[0] += sign * (b[length] - a[length])
             # Возвращаем результат, учитывая его знак
             return BigInt(('-' if is_neg_res else '') + ''.join(str(x) for x in res))
         return -BigInt(other) - (-BigInt(self)) if self.is_neg and other.is_neg else self + -BigInt(other)
@@ -192,7 +193,7 @@ class BigInt(object):
             return BigInt(0)
         self_len = len(self.value)  # Запоминаем длину первого числа
         other_len = len(other.value)  # Запоминаем длину второго числа
-        length = self_len + other_len + 1  # Результат влезет в сумму длин + 1 из-за возможного переноса
+        length = self_len + other_len  # Результат влезет в сумму длин + 1 из-за возможного переноса
         # Флаг отрицательности результата - отрицательный, если числа разных знаков
         is_neg_res = self.is_neg ^ other.is_neg
         if length < 10:  # Число небольшое, можно по нормальному
@@ -200,19 +201,20 @@ class BigInt(object):
             return BigInt(-res if is_neg_res else res)
         else:  # Умножаем в столбик
             # Массивы аргументов
-            a = [0] * length
-            b = [0] * length
-            res = [0] * length
+            new_length = length + 1
+            a = [0] * new_length
+            b = [0] * new_length
+            res = [0] * new_length
             # Заполняем массивы инверсной записью чисел (с ведущими нулями)
-            for i in range(length):
+            for i in range(new_length):
                 a[i] = int(self.value[self_len - 1 - i]) if i < self_len else 0
                 b[i] = int(other.value[other_len - 1 - i]) if i < other_len else 0
             # Выполняем умножение "в столбик"
             for i in range(self_len):
                 for j in range(other_len):
-                    res[length - 1 - (i + j)] += a[i] * b[j]
-                    res[length - 1 - (i + j + 1)] += res[length - 1 - (i + j)] // 10
-                    res[length - 1 - (i + j)] %= 10
+                    res[length - (i + j)] += a[i] * b[j]
+                    res[length - (i + j + 1)] += res[length - (i + j)] // 10
+                    res[length - (i + j)] %= 10
             # Возвращаем результат, учитывая его знак
             return BigInt(('-' if is_neg_res else '') + ''.join(str(x) for x in res))
 
@@ -225,13 +227,13 @@ class BigInt(object):
         if value1 == '0':
             return BigInt(0)  # А вот ноль делить можно на всё, кроме нуля, но смысл
         if value2 == '1':
-            return BigInt(-BigInt(self) if other.is_neg else BigInt(self))  # Делить на 1 можно, но смысл?
+            return -BigInt(self) if other.is_neg else BigInt(self)  # Делить на 1 можно, но смысл?
         zeroes = 0
         while value2[len(value2) - 1 - zeroes] == '0':
             zeroes += 1
         if zeroes >= len(value1):
             return BigInt(0)
-        # Избавляемся от общих нулей в конце чисел
+        # если у нас 13698 / 1000, то мы можем делить 13 / 1
         if zeroes:
             value1 = value1[:len(value1) - zeroes]
             value2 = value2[:len(value2) - zeroes]
@@ -245,10 +247,8 @@ class BigInt(object):
         index = 0  # Стартуем с нулевого индекса
         div = ''  # Строка результата деления
         v = ''  # Строка подчисла (которое делится на делитель в столбик)
-        # Формируем начальное число для деления
-        while BigInt(v) < tmp and index < length:
-            v = v + value1[index]
-            index += 1
+        index = len(value2)
+        v = value1[:index]
         mod = None
         while True:
             count = 0  # Результат деления подчисла на делитель
