@@ -137,6 +137,8 @@ class BigInt(object):
 
     # Сложение двух чисел
     def __add__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
         # Если знаки одинаковые, то выполняем сложение
         if other.is_neg == self.is_neg:
             num2 = other.value  # Запоминаем значение второго операнда
@@ -158,6 +160,8 @@ class BigInt(object):
 
     # Вычитание одного числа из другого
     def __sub__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
         # Если числа равны, считать не нужно
         if self == other:
             return BigInt(0)
@@ -192,6 +196,8 @@ class BigInt(object):
 
     # Умножение двух чисел
     def __mul__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
         # Если один из множителей равен нулю, то результат равен нулю
         if self.value == '0' or other.value == '0':
             return BigInt(0)
@@ -224,6 +230,8 @@ class BigInt(object):
 
     # Деление одного числа на другое
     def __truediv__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
         value1 = self.value  # Запоминаем значение первого числа
         value2 = other.value  # Запоминаем значение второго числа
         if value2 == '0':
@@ -288,6 +296,8 @@ class BigInt(object):
 
     # Остаток от деления
     def __mod__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
         if other.value == '0':
             return None
         if self.value == '0' or other.value == "1":
