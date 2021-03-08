@@ -130,6 +130,58 @@ class BigInt(object):
     def __neg__(self):
         return BigInt(self.value if self.is_neg else '-' + self.value)
 
+    # Число в бинарный вид (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    def to_bin(self):
+        return bin(int(self.value))
+
+    # Битовый сдвиг вправо (x >> y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    def __rshift__(self, n):
+        if n < 0:
+            raise ValueError
+        self_bin = self.to_bin()
+        if n >= len(self_bin) - 2 or (self == 0):
+            return BigInt(0)
+        return BigInt(int(self_bin[:len(self_bin) - n], 2))
+
+    # Битовый сдвиг вслево (x << y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    def __lshift__(self, n):
+        if n < 0:
+            raise ValueError
+        if self == 0:
+            return BigInt(0)
+        self_bin = self.to_bin()
+        return BigInt(int(self_bin + ('0' * n), 2))
+
+    # Побитовое И (x & y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    def __and__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
+        self_bin = self.to_bin()[2:]
+        other_bin = other.to_bin()[2:]
+        self_len = len(self_bin)
+        other_len = len(other_bin)
+        if self_len > other_len:
+            other_bin = other_bin.zfill(self_len)
+        elif self_len < other_len:
+            self_bin = self_bin.zfill(other_len)
+        res = int('0b' + ''.join(['1' if (x, y) == ('1', '1') else '0' for x, y in zip(self_bin, other_bin)]), 2)
+        return BigInt(res)
+
+    # Побитовое ИЛИ (x | y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    def __or__(self, other):
+        if isinstance(other, int):
+            other = BigInt(other)
+        self_bin = self.to_bin()[2:]
+        other_bin = other.to_bin()[2:]
+        self_len = len(self_bin)
+        other_len = len(other_bin)
+        if self_len > other_len:
+            other_bin = other_bin.zfill(self_len)
+        elif self_len < other_len:
+            self_bin = self_bin.zfill(other_len)
+        res = int('0b' + ''.join(['0' if (x, y) == ('0', '0') else '1' for x, y in zip(self_bin, other_bin)]), 2)
+        return BigInt(res)
+
     # Возврат копии
     def copy(self):
         """Возврат копии"""
