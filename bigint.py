@@ -84,8 +84,6 @@ class BigInt(object):
     def __lt__(self, other):
         if isinstance(other, int):
             other = BigInt(other)
-        else:
-            return None
         self_len = len(self.value)  # Запоминаем длину первого числа
         self_other = len(other.value)  # Запоминаем длину второго числа
         # Если знаки одинаковые, то проверяем значения
@@ -110,8 +108,6 @@ class BigInt(object):
     def __eq__(self, other):
         if isinstance(other, int):
             other = BigInt(other)
-        else:
-            return None
         return (self.value == other.value) and (self.is_neg == other.is_neg)
 
     # Перегрузка x != y
