@@ -399,6 +399,10 @@ class BigInt(object):
 
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
+    if a < 0:
+        a = -a
+    if b < 0:
+        b = -b
     while b:
         a, b = b, a % b
     return a
@@ -406,6 +410,10 @@ def GCD(a, b):
 
 def binary_GCD(num1, num2):
     """Нахождение наибольшего общего делителя у чисел `a` и `b` (Бинарный алгоритм)"""
+    if num1 < 0:
+        num1 = -num1
+    if num2 < 0:
+        num2 = -num2
     shift = 0
     # Если одно из чисел равно нулю, делитель - другое число
     if num1 == 0:
