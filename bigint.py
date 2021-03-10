@@ -445,6 +445,44 @@ def binary_GCD(num1, num2):
 
 
 if __name__ == '__main__':
-    a = BigInt('111111111111111111111111111111111111111')
-    b = BigInt('1111111111111111')
-    print(a / b)
+    while True:
+        menu_text = '\n'.join([
+            'Выберите действие:',
+            '1) x + y',
+            '2) x - y',
+            '3) x * y',
+            '4) x / y',
+            'q) Выход'
+        ])
+        print(menu_text)
+        choice = input()
+        if choice == '1':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = x + y
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x + y =', res, '\n\n')
+        elif choice == '2':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = x - y
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x - y =', res, '\n\n')
+        elif choice == '3':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = x * y
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x * y =', res, '\n\n')
+        elif choice == '4':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = x / y
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x / y =', res, '\n\n')
+        else:
+            exit()
