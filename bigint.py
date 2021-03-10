@@ -356,8 +356,7 @@ class BigInt(object):
             return BigInt(0)
         # Если числа меньше 9, можно посчитать по нормальному
         if len(self.value) < 9 and len(other.value) < 9:
-            res = int(self.value) % int(other.value)
-            return BigInt(-res if self.is_neg else res)
+            return BigInt(int(str('-' if self.is_neg else '') + self.value) % int(str('-' if other.is_neg else '') + other.value))
         tmp = BigInt(other.value)
         divider_length = len(other.value)  # запоминаем длину делителя
         # Если длина больше 8, то обнуляем long'овый делитель, иначе переводим строку в long
