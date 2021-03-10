@@ -391,7 +391,7 @@ class BigInt(object):
             if mod2.value == '0':
                 return BigInt(0)
         res = -BigInt(mod2) if self.is_neg else BigInt(mod2)
-        if self.is_neg ^ other.is_neg:
+        if self.is_neg ^ other.is_neg and res != 0:
             return other + res
         return res
 
