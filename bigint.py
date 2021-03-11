@@ -451,6 +451,10 @@ if __name__ == '__main__':
             '2) x - y',
             '3) x * y',
             '4) x / y',
+            '5) Возведение числа x в степень y',
+            '6) Извлечение корня из числа x степени y',
+            '7) Нахождение НОД x и y с помощью алгоритма Евклида',
+            '8) Нахождение НОД x и y с помощью бинарного алгоритма',
             'q) Выход'
         ])
         print(menu_text)
@@ -483,5 +487,33 @@ if __name__ == '__main__':
             res = x / y
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('x / y =', res, '\n\n')
+        elif choice == '5':
+            x = BigInt(input('Введите первое число (x): '))
+            y = int(input('Введите второе число (y): '))
+            t = time.time()
+            res = x.bipow(y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x**y =', res, '\n\n')
+        elif choice == '6':
+            x = BigInt(input('Введите первое число (x): '))
+            y = int(input('Введите второе число (y): '))
+            t = time.time()
+            res = x.birt(y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('x**(1/y) =', res, '\n\n')
+        elif choice == '7':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = GCD(x, y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('GCD(x, y) =', res, '\n\n')
+        elif choice == '8':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = binary_GCD(x, y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('binary_GCD(x, y) =', res, '\n\n')
         else:
             exit()
