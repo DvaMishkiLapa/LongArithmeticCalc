@@ -227,7 +227,7 @@ class BigInt(object):
         if self == other:
             return BigInt(0)
         if self == 0:
-            return other
+            return -other
         if other == 0:
             return self
         # Если оба числа положительные, выполняем вычитание
