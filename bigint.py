@@ -1,5 +1,6 @@
 # -*- coding: utf-8 -*-
 
+import time
 from sys import setrecursionlimit
 
 setrecursionlimit(1500)  # Максимальный стек рекурсии
