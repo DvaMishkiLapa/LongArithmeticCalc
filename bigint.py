@@ -408,33 +408,44 @@ class BigInt(object):
             return other + res
         return res
 
-    # Остаток от деления
-    def ring_add(self, b, m):
+    # Сложение в кольце вычетов
+    @staticmethod
+    def ring_add(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
         if isinstance(b, int):
             b = BigInt(b)
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
             None
-        return abs(self + b) % m
+        return abs(a + b) % m
 
-    def ring_sub(self, b, m):
+    # Вычитание в кольце вычетов
+    @staticmethod
+    def ring_sub(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
         if isinstance(b, int):
             b = BigInt(b)
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
             None
-        return abs(self - b) % m
+        return abs(a - b) % m
 
-    def ring_mul(self, b, m):
+    # Умножение в кольце вычетов
+    @staticmethod
+    def ring_mul(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
         if isinstance(b, int):
             b = BigInt(b)
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
             None
-        return abs(self * b) % m
+        return abs(a * b) % m
 
 
 def GCD(a, b):
