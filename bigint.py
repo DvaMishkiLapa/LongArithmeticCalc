@@ -568,6 +568,11 @@ if __name__ == '__main__':
             '6) Извлечение корня из числа x степени y',
             '7) Нахождение НОД x и y с помощью алгоритма Евклида',
             '8) Нахождение НОД x и y с помощью бинарного алгоритма',
+            '9) Сложение в кольце вычетов',
+            '10) Вычитание в кольце вычетов',
+            '11) Умножение в кольце вычетов',
+            '12) Найти элемент, обратный к элементу, взаимно простым с модулем кольца',
+            '14) Возвести в натуральную степень элемент кольца вычетов',
             'q) Выход'
         ])
         print(menu_text)
@@ -628,5 +633,44 @@ if __name__ == '__main__':
             res = binary_GCD(x, y)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('binary_GCD(x, y) =', res, '\n\n')
+        elif choice == '9':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            m = BigInt(input('Введите модуль (m): '))
+            t = time.time()
+            res = BigInt.ring_add(x, y, m)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('ring_add(x, y, m) =', res, '\n\n')
+        elif choice == '10':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            m = BigInt(input('Введите модуль (m): '))
+            t = time.time()
+            res = BigInt.ring_sub(x, y, m)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('ring_sub(x, y, m) =', res, '\n\n')
+        elif choice == '11':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            m = BigInt(input('Введите модуль (m): '))
+            t = time.time()
+            res = BigInt.ring_mul(x, y, m)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('ring_mul(x, y, m) =', res, '\n\n')
+        elif choice == '12':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            res = BigInt.ring_inv_el(x, y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('ring_inv_el(x, y) =', res, '\n\n')
+        elif choice == '13':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            m = BigInt(input('Введите модуль (m): '))
+            t = time.time()
+            res = BigInt.ring_pow(x, y, m)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print('ring_pow(x, y, m) =', res, '\n\n')
         else:
             exit()
