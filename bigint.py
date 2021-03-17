@@ -469,6 +469,20 @@ class BigInt(object):
             old_t, t = t, old_t - q * t
         return old_r, old_t, old_s
 
+    @staticmethod
+    def ring_inv_el(x, n):
+        d, v, u = BigInt.Evclid_GCD(x, n)
+        if d != 1:
+            return None
+        zero = BigInt('0')
+        while True:
+            if u > n:
+                u = u - n
+            if u < zero:
+                u = u + n
+            if zero < u < n:
+                break
+        return u
 
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
