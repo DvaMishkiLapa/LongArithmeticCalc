@@ -53,10 +53,13 @@ class BigInt(object):
             return None
         if not n:
             return BigInt(1)
-        if n & 1:
-            return BigInt(self.bipow(n - 1)) * self
-        tmp = BigInt(self.bipow(n // 2))
-        return BigInt(tmp * tmp)
+        b = bin(n)[2:]
+        res = self
+        for i in range(1, len(b)):
+            res = res * res
+            if b[i] == '1':
+                res = res * self
+        return res
 
     def birt(self, n):
         """Вычисление корня степени `n` из числа"""
