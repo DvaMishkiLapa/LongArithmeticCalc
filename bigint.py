@@ -408,6 +408,34 @@ class BigInt(object):
             return other + res
         return res
 
+    # Остаток от деления
+    def ring_add(self, b, m):
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            None
+        return abs(self + b) % m
+
+    def ring_sub(self, b, m):
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            None
+        return abs(self - b) % m
+
+    def ring_mul(self, b, m):
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            None
+        return abs(self * b) % m
+
 
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
