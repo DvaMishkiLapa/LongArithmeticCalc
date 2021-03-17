@@ -131,6 +131,8 @@ class BigInt(object):
 
     # Унарный минус
     def __neg__(self):
+        if self == 0:
+            return self
         return BigInt(self.value if self.is_neg else '-' + self.value)
 
     # Число в бинарный вид (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
@@ -194,6 +196,10 @@ class BigInt(object):
     def __add__(self, other):
         if isinstance(other, int):
             other = BigInt(other)
+        if self == 0:
+            return other
+        if other == 0:
+            return self
         # Если знаки одинаковые, то выполняем сложение
         if other.is_neg == self.is_neg:
             num2 = other.value  # Запоминаем значение второго операнда
@@ -220,6 +226,10 @@ class BigInt(object):
         # Если числа равны, считать не нужно
         if self == other:
             return BigInt(0)
+        if self == 0:
+            return other
+        if other == 0:
+            return self
         # Если оба числа положительные, выполняем вычитание
         if not self.is_neg and not other.is_neg:
             self_len = len(self.value)  # Запоминаем длину первого числа
