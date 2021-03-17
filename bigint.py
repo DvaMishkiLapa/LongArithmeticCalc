@@ -447,6 +447,28 @@ class BigInt(object):
             None
         return abs(a * b) % m
 
+    # Расширенный алгоритм Евклида
+    @staticmethod
+    def Evclid_GCD(a, b):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if a < 0:
+            a = -a
+        if b < 0:
+            b = -b
+        zero, one = BigInt('0'), BigInt('1')
+        r, old_r = a, b
+        s, old_s = zero, one
+        t, old_t = one, zero
+        while r != 0:
+            q = old_r / r
+            old_r, r = r, old_r - q * r
+            old_s, s = s, old_s - q * s
+            old_t, t = t, old_t - q * t
+        return old_r, old_t, old_s
+
 
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
