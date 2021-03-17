@@ -484,6 +484,25 @@ class BigInt(object):
                 break
         return u
 
+    @staticmethod
+    def ring_pow(x, m, n):
+        if isinstance(x, int):
+            x = BigInt(x)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if isinstance(n, int):
+            n = BigInt(n)
+        if m == 0:
+            return BigInt(1)
+        b = m.to_bin()[2:]
+        z = x % n
+        for i in range(1, len(b)):
+            z = (z * z) % n
+            if b[i] == '1':
+                z = (z * x) % n
+        return z
+
+
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
     if a < 0:
