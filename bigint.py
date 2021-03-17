@@ -470,8 +470,12 @@ class BigInt(object):
             old_t, t = t, old_t - q * t
         return old_r, old_t, old_s
 
+    # Нахождение обратного элемента в кольце
     @staticmethod
     def ring_inv_el(x, n):
+        x = x % n
+        if x == 1:
+            return x
         d, v, u = BigInt.Evclid_GCD(x, n)
         if d != 1:
             return None
@@ -485,6 +489,7 @@ class BigInt(object):
                 break
         return u
 
+    # Нахождение степени в кольце
     @staticmethod
     def ring_pow(x, m, n):
         if isinstance(x, int):
