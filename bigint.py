@@ -419,7 +419,7 @@ class BigInt(object):
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
-            None
+            return None
         return abs(a + b) % m
 
     # Вычитание в кольце вычетов
@@ -432,7 +432,7 @@ class BigInt(object):
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
-            None
+            return None
         return abs(a - b) % m
 
     # Умножение в кольце вычетов
@@ -445,7 +445,7 @@ class BigInt(object):
         if isinstance(m, int):
             m = BigInt(m)
         if m < 1:
-            None
+            return None
         return abs(a * b) % m
 
     # Расширенный алгоритм Евклида
@@ -498,6 +498,8 @@ class BigInt(object):
             m = BigInt(m)
         if isinstance(n, int):
             n = BigInt(n)
+        if n < 1:
+            return None
         if m == 0:
             return BigInt(1)
         b = m.to_bin()[2:]
@@ -572,7 +574,7 @@ if __name__ == '__main__':
             '10) Вычитание в кольце вычетов',
             '11) Умножение в кольце вычетов',
             '12) Найти элемент, обратный к элементу, взаимно простым с модулем кольца',
-            '14) Возвести в натуральную степень элемент кольца вычетов',
+            '13) Возвести в натуральную степень элемент кольца вычетов',
             'q) Выход'
         ])
         print(menu_text)
