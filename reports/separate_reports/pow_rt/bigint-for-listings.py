@@ -7,15 +7,10 @@ setrecursionlimit(1500)  # Максимальный стек рекурсии
 
 
 class BigInt(object):
-    """Класс работы с большими целыми числами"""
     is_neg = False  # Флаг отрицательности числа
     value = ''      # Число в виде стоки
 
     def __init__(self, x=0):
-        """Без аргументов конструктор задает значение равное нулю.
-        Если `x` - число, конструктор заполняет экземпляр этим числом.
-        Если `x` - строка, которая могла бы быть числом, конструктор заполняет экземпляр этим числом.
-        Если `x` - экземпляр того же класса, конструктор копирует его содержимое в новый экземпляр."""
         self.value = '0'
         # Если в конструктор передано целое число
         if isinstance(x, int):
@@ -40,7 +35,6 @@ class BigInt(object):
 
     # Является ли число четным
     def is_even(self):
-        """Является ли число четным"""
         return not (int(self.value[-1]) \& 1)
 
     # Перегрузка числа по модулю
@@ -48,23 +42,20 @@ class BigInt(object):
         return BigInt(self.value)
 
     def bipow(self, n):
-        """Возведение числа в степень `n`"""
         # Любое число в степени 0 = 1
         if n < 0:
             return None
         if not n:
             return BigInt(1)
-        # if n \& 1:
-        #     return BigInt(self.bipow(n - 1)) * self
-        # tmp = BigInt(self.bipow(n // 2))
-        # return BigInt(tmp * tmp)
+        b = bin(n)[2:]
         res = self
-        for _ in range(n - 1):
-            res *= self
+        for i in range(1, len(b)):
+            res = res * res
+            if b[i] == '1':
+                res = res * self
         return res
 
     def birt(self, n):
-        """Вычисление корня степени `n` из числа"""
         # Корень извлекать можем только из положительного числа
         if (n < 0) or self.is_neg:
             return None
@@ -133,6 +124,8 @@ class BigInt(object):
 
     # Унарный минус
     def __neg__(self):
+        if self == 0:
+            return self
         return BigInt(self.value if self.is_neg else '-' + self.value)
 
     # Число в бинарный вид (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
@@ -189,13 +182,16 @@ class BigInt(object):
 
     # Возврат копии
     def copy(self):
-        """Возврат копии"""
         return BigInt(('-' if self.is_neg else '') + self.value)
 
     # Сложение двух чисел
     def __add__(self, other):
         if isinstance(other, int):
             other = BigInt(other)
+        if self == 0:
+            return other
+        if other == 0:
+            return self
         # Если знаки одинаковые, то выполняем сложение
         if other.is_neg == self.is_neg:
             num2 = other.value  # Запоминаем значение второго операнда
@@ -222,6 +218,10 @@ class BigInt(object):
         # Если числа равны, считать не нужно
         if self == other:
             return BigInt(0)
+        if self == 0:
+            return -other
+        if other == 0:
+            return self
         # Если оба числа положительные, выполняем вычитание
         if not self.is_neg and not other.is_neg:
             self_len = len(self.value)  # Запоминаем длину первого числа
@@ -402,7 +402,6 @@ class BigInt(object):
 
 
 def GCD(a, b):
-    """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
     if a < 0:
         a = -a
     if b < 0:
@@ -413,7 +412,6 @@ def GCD(a, b):
 
 
 def binary_GCD(num1, num2):
-    """Нахождение наибольшего общего делителя у чисел `a` и `b` (Бинарный алгоритм)"""
     if num1 < 0:
         num1 = -num1
     if num2 < 0:
