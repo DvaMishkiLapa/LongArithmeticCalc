@@ -49,12 +49,14 @@ class BigInt(object):
 
     def bipow(self, n):
         """Возведение числа в степень `n`"""
+        if isinstance(n, int):
+            n = BigInt(n)
         # Любое число в степени 0 = 1
         if n < 0:
             return None
         if not n:
             return BigInt(1)
-        b = bin(n)[2:]
+        b = n.to_bin()[2:]
         res = self
         for i in range(1, len(b)):
             res = res * res
@@ -510,6 +512,62 @@ class BigInt(object):
                 z = (z * x) % n
         return z
 
+    # Алгоритм LSBGCD для нахождения НОД и коэффициенты
+    @staticmethod
+    def lsbgcd(a, b):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if a < 0:
+            a = -a
+        if b < 0:
+            b = -b
+        is_swap = False
+        if b > a:
+            a, b = b, a
+            is_swap = True
+        zero, one, two = BigInt(0), BigInt(1), BigInt(2)
+        x, y = a, b
+        A, B, C, D = one, zero, zero, one
+        log2_10 = BigInt(3)
+        while y:
+            n = log2_10 * BigInt(str(len(y.value)))
+            two_n = two.bipow(n)
+            left = two_n * y
+            right = two_n * two * y
+            while True:
+                if left <= x < right:
+                    break
+                if x < left:
+                    n = n - one
+                if x >= right:
+                    n = n + one
+                two_n = two.bipow(n)
+                left = two_n * y
+                right = two_n * two * y
+            s = x - left
+            p = right - x
+            if s <= p:
+                t = s
+                At = A - two_n * C
+                Bt = B - two_n * D
+            else:
+                t = p
+                At = two_n * two * C - A
+                Bt = two_n * two * D - B
+            if t <= y:
+                x = y
+                y = t
+                A, B, C, D = C, D, At, Bt
+            else:
+                x = t
+                A = At
+                B = Bt
+        if is_swap:
+            return x, B, A  # d, v, u
+        return x, A, B  # d, u, v
+
 
 def GCD(a, b):
     """Нахождение наибольшего общего делителя у чисел `a` и `b`"""
@@ -570,11 +628,12 @@ if __name__ == '__main__':
             '6) Извлечение корня из числа x степени y',
             '7) Нахождение НОД x и y с помощью алгоритма Евклида',
             '8) Нахождение НОД x и y с помощью бинарного алгоритма',
-            '9) Сложение в кольце вычетов',
-            '10) Вычитание в кольце вычетов',
-            '11) Умножение в кольце вычетов',
-            '12) Найти элемент, обратный к элементу, взаимно простым с модулем кольца',
-            '13) Возвести в натуральную степень элемент кольца вычетов',
+            '9) Нахождение НОД x и y, а так же их коэффициенты u, v с помощью алгоритма LSBGCD',
+            '10) Сложение в кольце вычетов',
+            '11) Вычитание в кольце вычетов',
+            '12) Умножение в кольце вычетов',
+            '13) Найти элемент, обратный к элементу, взаимно простым с модулем кольца',
+            '14) Возвести в натуральную степень элемент кольца вычетов',
             'q) Выход'
         ])
         print(menu_text)
@@ -638,12 +697,19 @@ if __name__ == '__main__':
         elif choice == '9':
             x = BigInt(input('Введите первое число (x): '))
             y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            d, u, v = BigInt.lsbgcd(x, y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print(f'lsbgcd(x, y): d = {d}, u = {u}, v = {v}', '\n\n')
+        elif choice == '10':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
             m = BigInt(input('Введите модуль (m): '))
             t = time.time()
             res = BigInt.ring_add(x, y, m)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('ring_add(x, y, m) =', res, '\n\n')
-        elif choice == '10':
+        elif choice == '11':
             x = BigInt(input('Введите первое число (x): '))
             y = BigInt(input('Введите второе число (y): '))
             m = BigInt(input('Введите модуль (m): '))
@@ -651,7 +717,7 @@ if __name__ == '__main__':
             res = BigInt.ring_sub(x, y, m)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('ring_sub(x, y, m) =', res, '\n\n')
-        elif choice == '11':
+        elif choice == '12':
             x = BigInt(input('Введите первое число (x): '))
             y = BigInt(input('Введите второе число (y): '))
             m = BigInt(input('Введите модуль (m): '))
@@ -659,14 +725,14 @@ if __name__ == '__main__':
             res = BigInt.ring_mul(x, y, m)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('ring_mul(x, y, m) =', res, '\n\n')
-        elif choice == '12':
+        elif choice == '13':
             x = BigInt(input('Введите первое число (x): '))
             y = BigInt(input('Введите второе число (y): '))
             t = time.time()
             res = BigInt.ring_inv_el(x, y)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('ring_inv_el(x, y) =', res, '\n\n')
-        elif choice == '13':
+        elif choice == '14':
             x = BigInt(input('Введите первое число (x): '))
             y = BigInt(input('Введите второе число (y): '))
             m = BigInt(input('Введите модуль (m): '))
