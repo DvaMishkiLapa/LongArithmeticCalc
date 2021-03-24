@@ -35,19 +35,21 @@ class BigInt(object):
 
     # Является ли число четным
     def is_even(self):
-        return not (int(self.value[-1]) \ 1)
+        return not (int(self.value[-1]) \& 1)
 
     # Перегрузка числа по модулю
     def __abs__(self):
         return BigInt(self.value)
 
     def bipow(self, n):
+        if isinstance(n, int):
+            n = BigInt(n)
         # Любое число в степени 0 = 1
         if n < 0:
             return None
         if not n:
             return BigInt(1)
-        b = bin(n)[2:]
+        b = n.to_bin()[2:]
         res = self
         for i in range(1, len(b)):
             res = res * res
@@ -150,7 +152,7 @@ class BigInt(object):
         self_bin = self.to_bin()
         return BigInt(int(self_bin + ('0' * n), 2))
 
-    # Побитовое И (x \ y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
+    # Побитовое И (x \& y) (ТОЛЬКО ПОЛОЖИТЕЛЬНЫЕ)
     def __and__(self, other):
         if isinstance(other, int):
             other = BigInt(other)
@@ -400,6 +402,159 @@ class BigInt(object):
             return other + res
         return res
 
+    # Сложение в кольце вычетов
+    @staticmethod
+    def ring_add(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            return None
+        return abs(a + b) % m
+
+    # Вычитание в кольце вычетов
+    @staticmethod
+    def ring_sub(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            return None
+        return abs(a - b) % m
+
+    # Умножение в кольце вычетов
+    @staticmethod
+    def ring_mul(a, b, m):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if m < 1:
+            return None
+        return abs(a * b) % m
+
+    # Расширенный алгоритм Евклида
+    @staticmethod
+    def Evclid_GCD(a, b):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        if a < 0:
+            a = -a
+        if b < 0:
+            b = -b
+        zero, one = BigInt('0'), BigInt('1')
+        r, old_r = a, b
+        s, old_s = zero, one
+        t, old_t = one, zero
+        while r != 0:
+            q = old_r / r
+            old_r, r = r, old_r - q * r
+            old_s, s = s, old_s - q * s
+            old_t, t = t, old_t - q * t
+        return old_r, old_t, old_s
+
+    # Нахождение обратного элемента в кольце
+    @staticmethod
+    def ring_inv_el(x, n):
+        x = x % n
+        if x == 1:
+            return x
+        d, v, u = BigInt.Evclid_GCD(x, n)
+        if d != 1:
+            return None
+        zero = BigInt('0')
+        while True:
+            if u > n:
+                u = u - n
+            if u < zero:
+                u = u + n
+            if zero < u < n:
+                break
+        return u
+
+    # Нахождение степени в кольце
+    @staticmethod
+    def ring_pow(x, m, n):
+        if isinstance(x, int):
+            x = BigInt(x)
+        if isinstance(m, int):
+            m = BigInt(m)
+        if isinstance(n, int):
+            n = BigInt(n)
+        if n < 1:
+            return None
+        if m == 0:
+            return BigInt(1)
+        b = m.to_bin()[2:]
+        z = x % n
+        for i in range(1, len(b)):
+            z = (z * z) % n
+            if b[i] == '1':
+                z = (z * x) % n
+        return z
+
+    # Алгоритм LSBGCD для нахождения НОД и коэффициенты
+    @staticmethod
+    def lsbgcd(a, b):
+        if isinstance(a, int):
+            a = BigInt(a)
+        if isinstance(b, int):
+            b = BigInt(b)
+        is_swap = False
+        if b > a:
+            a, b = b, a
+            is_swap = True
+        zero, one, two = BigInt(0), BigInt(1), BigInt(2)
+        x, y = a, b
+        A, B, C, D = one, zero, zero, one
+        log2_10 = BigInt(3)
+        while y:
+            n = log2_10 * BigInt(str(len(y.value)))
+            two_n = two.bipow(n)
+            left = two_n * y
+            right = two_n * two * y
+            while True:
+                if left <= x < right:
+                    break
+                if x < left:
+                    n = n - one
+                if x >= right:
+                    n = n + one
+                two_n = two.bipow(n)
+                left = two_n * y
+                right = two_n * two * y
+            s = x - left
+            p = right - x
+            if s <= p:
+                t = s
+                At = A - two_n * C
+                Bt = B - two_n * D
+            else:
+                t = p
+                At = two_n * two * C - A
+                Bt = two_n * two * D - B
+            if t <= y:
+                x = y
+                y = t
+                A, B, C, D = C, D, At, Bt
+            else:
+                x = t
+                A = At
+                B = Bt
+        if is_swap:
+            return x, B, A  # d, v, u
+        return x, A, B  # d, u, v
+
 
 def GCD(a, b):
     if a < 0:
@@ -423,18 +578,18 @@ def binary_GCD(num1, num2):
     if num2 == 0:
         return num1
     # Если num1 = 1010, а num2 = 0100, то num1 | num2 = 1110
-    # 1110 \ 0001 == 0, тогда происходит сдвиг, который фиксируется в shift
-    while (num1 | num2) \ 1 == 0:
+    # 1110 \& 0001 == 0, тогда происходит сдвиг, который фиксируется в shift
+    while (num1 | num2) \& 1 == 0:
         shift += 1
         num1 = num1 >> 1
         num2 = num2 >> 1
     # Если True, значит num1 - четное, иначе - нечетное
-    while num1 \ 1 == 0:
+    while num1 \& 1 == 0:
         # если нечетное, сдвигаем на один бит
         num1 = num1 >> 1
     while num2 != 0:
         # пока число нечётное, сдвигаем на один бит
-        while num2 \ 1 == 0:
+        while num2 \& 1 == 0:
             num2 = num2 >> 1
         # если первое число больше второго
         if num1 > num2:
@@ -458,6 +613,7 @@ if __name__ == '__main__':
             '6) Извлечение корня из числа x степени y',
             '7) Нахождение НОД x и y с помощью алгоритма Евклида',
             '8) Нахождение НОД x и y с помощью бинарного алгоритма',
+            '9) Нахождение НОД x и y, а так же их коэффициенты u, v с помощью алгоритма LSBGCD',
             'q) Выход'
         ])
         print(menu_text)
@@ -518,5 +674,12 @@ if __name__ == '__main__':
             res = binary_GCD(x, y)
             print(f'\nВремя расчета: {time.time() - t} сек.')
             print('binary_GCD(x, y) =', res, '\n\n')
+        elif choice == '9':
+            x = BigInt(input('Введите первое число (x): '))
+            y = BigInt(input('Введите второе число (y): '))
+            t = time.time()
+            d, u, v = BigInt.lsbgcd(x, y)
+            print(f'\nВремя расчета: {time.time() - t} сек.')
+            print(f'lsbgcd(x, y): d = {d}, u = {u}, v = {v}', '\n\n')
         else:
             exit()
