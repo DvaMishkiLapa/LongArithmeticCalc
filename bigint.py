@@ -540,9 +540,7 @@ class BigInt(object):
             two_n = two.bipow(n)
             left = two_n * y
             right = two_n * two * y
-            while True:
-                if left <= x < right:
-                    break
+            while not left <= x < right:
                 if x < left:
                     n = n - one
                 if x >= right:
