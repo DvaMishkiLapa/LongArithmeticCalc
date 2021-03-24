@@ -475,6 +475,10 @@ class BigInt(object):
     # Нахождение обратного элемента в кольце
     @staticmethod
     def ring_inv_el(x, n):
+        if isinstance(x, int):
+            x = BigInt(x)
+        if isinstance(n, int):
+            n = BigInt(n)
         x = x % n
         if x == 1:
             return x
